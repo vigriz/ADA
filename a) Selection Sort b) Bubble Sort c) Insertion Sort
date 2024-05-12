@@ -1,0 +1,98 @@
+#include <stdio.h>
+
+// Selection Sort
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int min_index = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[min_index]) {
+                min_index = j;
+            }
+        }
+        // Swap the found minimum element with the first element
+        int temp = arr[i];
+        arr[i] = arr[min_index];
+        arr[min_index] = temp;
+    }
+}
+
+// Bubble Sort
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        // Last i elements are already in place
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap arr[j] and arr[j+1]
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Insertion Sort
+void insertionSort(int arr[], int n) {
+    int i, key, j;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        // Move elements of arr[0..i-1], that are greater than key, to one position ahead of their current position
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+int main() {
+    int n;
+
+    // Input size of array
+    printf("Enter the size of the array: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    // Input elements of the array
+    printf("Enter %d elements of the array: ", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Copy array for each sorting algorithm
+    int arr_selection[n], arr_bubble[n], arr_insertion[n];
+    for (int i = 0; i < n; i++) {
+        arr_selection[i] = arr[i];
+        arr_bubble[i] = arr[i];
+        arr_insertion[i] = arr[i];
+    }
+
+    // Selection Sort
+    selectionSort(arr_selection, n);
+    printf("Selection Sort: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr_selection[i]);
+    }
+    printf("\n");
+
+    // Bubble Sort
+    bubbleSort(arr_bubble, n);
+    printf("Bubble Sort: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr_bubble[i]);
+    }
+    printf("\n");
+
+    // Insertion Sort
+    insertionSort(arr_insertion, n);
+    printf("Insertion Sort: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr_insertion[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
