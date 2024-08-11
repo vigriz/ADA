@@ -59,3 +59,41 @@ void main(){
 		}
 	}
 }
+//only to write
+void main(){
+	int n,i,j;
+	int *arr;
+	
+	FILE *b,*w,*a;
+	system("rm a.txt b.txt w.txt");
+	b = fopen("b.txt","a");
+	w = fopen("w.txt","a");
+	a = fopen("a.txt","a");
+	
+	for(n=10;n<1000;n+=10){
+		arr = (int*)malloc(n*sizeof(int));
+		
+		//Best Case
+		count=0;
+		for(i=0;i<n;i++){
+			arr[i] = (i==0) ? rand()%100 : arr[i-1]+rand()%10;
+		}
+		mergeSort(arr,0,n-1);
+		fprintf(b,"%d\t%d\n",n,count);
+		
+		//Worst Case
+		worstCaseGenerate(arr,0,n-1); //to generate worst case input
+		mergeSort(arr,0,n-1);
+		fprintf(w,"%d\t%d\n",n,count);
+		
+		//Average Case
+		count=0;
+		for(i=0;i<n;i++){
+			arr[i] = rand()%100;
+		}
+		mergeSort(arr,0,n-1);
+		fprintf(a,"%d\t%d\n",n,count);
+	}
+	
+	fclose(b); fclose(a); fclose(w);
+}
