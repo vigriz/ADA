@@ -5,7 +5,7 @@ int arr[100][100], visited[100], n, acyclic = 1, q[100], front = 0, rear = -1;
 int parent[100];
 int count = 0, flag = 0;
 
-void genData(int ch)
+void genData(int ch) 
 {
     printf("Graph is\n");
     if (ch == 0)
