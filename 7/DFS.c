@@ -2,7 +2,7 @@
 
 int graph[40][40], n, visited[40]={0}, acyclic =1;
 
-void createGraph(){
+void createGraph(){ 
 	printf("No. of vertices>> ");
 	scanf("%d", &n);
 	printf("Enter adjacency matrix:\n");
