@@ -1,106 +1,167 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int isCycle = 0, components = 0, n, opcount = 0, isTester = 0;
+int arr[100][100], visited[100] = {0}, n, acyclic = 1;
+int count = 0, flag = 0;
 
-void dfs(int mat[n][n], int *vis, int source, int par)
+void genData(int ch)
 {
-    vis[source] = 1;
-
-    if (isTester)
-        printf("%d ", source);
-
-    for (int i = 0; i < n; i++)
+    printf("Graph is\n");
+    if (ch == 0)
     {
-        opcount++;
-        if (mat[source][i] && vis[i] && i != par)
-            isCycle = 1;
-        else if (mat[source][i] && !vis[i])
-            dfs(mat, vis, i, source);
-    }
-}
-
-void checkConnectivity(int mat[n][n])
-{
-    int vis[n], k = 1;
-
-    for (int i = 0; i < n; i++)
-        vis[i] = 0;
-
-    for (int i = 0; i < n; i++)
-        if (!vis[i])
-        {
-            components++;
-
-            if (isTester)
-                printf("\nComponent %d: ", k++);
-            dfs(mat, &vis[0], i, -1);
-        }
-}
-
-void tester()
-{
-    isTester = 1;
-    printf("Enter the number of vertices\n");
-    scanf("%d", &n);
-    int adjMat[n][n];
-    printf("Enter the adjacency matrix :\n");
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            scanf("%d", &adjMat[i][j]);
-
-    checkConnectivity(adjMat);
-
-    printf("\nThe number of connected components :%d\n", components);
-
-    if (isCycle)
-        printf("Cycle exists\n");
-    else
-        printf("Cycle doesnot exists\n");
-}
-
-void plotter()
-{
-    FILE *f1 = fopen("dfsadjMat.txt", "w");
-    isTester = 0;
-
-    for (int k = 1; k <= 10; k++)
-    {
-        n = k;
-        int adjMat[n][n];
-
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
-                if (i != j)
-                    adjMat[i][j] = 1;
+                if (j == i + 1 || i == j + 1)
+                {
+                    arr[i][j] = 1;
+                }
                 else
-                    adjMat[i][j] = 0;
+                    arr[i][j] = 0;
+                printf("%d\t", arr[i][j]);
             }
+            printf("\n");
         }
-        opcount = 0;
-        checkConnectivity(adjMat);
-        fprintf(f1, "%d\t%d\n", n, opcount);
     }
-    fclose(f1);
+    else
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (j == i)
+                    arr[i][j] = 0;
+                else
+                    arr[i][j] = 1;
+                printf("%d\t", arr[i][j]);
+            }
+            printf("\n");
+        }
+    }
+    printf("\n");
+}
+
+void dfs(int v, int P)
+{
+    visited[v] = 1;
+    printf("%d--> ", v);
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[v][i])
+        {
+            count++;
+            if (!visited[i])
+                dfs(i, v);
+            else if (visited[i] && i != P)
+                acyclic = 0;
+        }
+    }
+}
+
+void connectandcyclic()
+{
+    if (flag == 0)
+        printf("\nGraph is connected\n");
+    else
+        printf("\nGraph is not connected\n");
+    if (acyclic)
+        printf("Graph is acyclic\n");
+    else
+        printf("Graph is cyclic\n");
+}
+
+void correctness()
+{
+    int src;
+    printf("Enter the number of nodes\n");
+    scanf("%d", &n);
+
+    printf("Enter the graph\n");
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &arr[i][j]);
+
+    printf("Enter the source vertex\n");
+    scanf("%d", &src);
+
+    printf("Graph Traversal\n");
+    dfs(src, -1);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (visited[i] == 0)
+        {
+            flag = 1;
+            printf("\nGraph Traversal(Disconnected): \n");
+            dfs(i, -1);
+        }
+    }
+
+    connectandcyclic();
 }
 
 void main()
 {
-    int choice;
-    printf("Enter\n1.Tester\n2.Plotter\n");
-    scanf("%d", &choice);
+    FILE *fptr = fopen("dfs.dat", "a");
+    int i, j;
+    n = 4;
 
-    switch (choice)
+    correctness();
+
+    for (i = 0; i < n; i++)
+        visited[i] = 0;
+
+    while (n <= 8)
     {
-    case 1:
-        tester();
-        break;
-    case 2:
-        plotter();
-        break;
-    default:
-        printf("Invalid choice");
+        // best case
+        printf("\nBest case:\n\n");
+        for (i = 0; i <= n; i++)
+            visited[i] = 0;
+        genData(0);
+
+        acyclic = 1;
+        flag = 0;
+
+        count = 0;
+        for (i = 0; i < n; i++)
+        {
+            if (visited[i] == 0)
+            {
+                if (i != 0)
+                    flag = 1;
+                printf("\nGraph: ");
+                dfs(i, -1);
+            }
+        }
+        connectandcyclic();
+        fprintf(fptr, "%d\t%d\t", n, count);
+
+        // worst case
+        printf("\n\nWorst case:\n");
+        count = 0;
+        acyclic = 1;
+        flag = 0;
+
+        for (i = 0; i < n; i++)
+            visited[i] = 0;
+
+        genData(1);
+
+        for (i = 0; i < n; i++)
+        {
+            if (visited[i] == 0)
+            {
+                if (i != 0)
+                    flag = 1;
+                printf("\nGraph: ");
+                dfs(i, -1);
+            }
+        }
+        connectandcyclic();
+        fprintf(fptr, "%d\n", count);
+        n = n + 1;
     }
+
+    fclose(fptr);
 }
