@@ -127,6 +127,10 @@ plot "binarybest.txt" using 1:2 with lines title 'Best Case', \
      "binaryavg.txt" using 1:2 with lines title 'Average Case', \
      "binaryworst.txt" using 1:2 with lines title 'Worst Case'
 
+    In terminal
+gnuplot plot_binary_search.gnuplot
+
+
   Aliter:
 set title "Binary Search"
 set xrange[0:50000]
