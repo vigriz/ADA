@@ -193,3 +193,6 @@ set xlabel "Particular pair of numbers"
 set ylabel "Count"
 set style data linespoints
 plot 'gcd.dat' u 1:2 w lp,'gcd.dat' u 1:3 w lp,'gcd.dat' u 1:4 w lp
+
+In terminal
+gnuplot plot_gcd.gnuplot
